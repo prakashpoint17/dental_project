@@ -4,5 +4,7 @@ python-multipart
 ultralytics
 google-genai
 opencv-python-headless
-dotenv
+python-dotenv
+numpy
 pillow
+torch --index-url https://download.pytorch.org/whl/cpu

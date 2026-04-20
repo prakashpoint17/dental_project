@@ -35,6 +35,8 @@ def download_model():
 
 download_model()
 
+model = YOLO("best.pt")
+
 @app.post("/diagnose")
 async def diagnose(file: UploadFile = File(...), selected_classes: str = Form("[]")):
     # 1. Read the file bytes here (asynchronous)
