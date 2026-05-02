@@ -5,6 +5,8 @@ opencv-python-headless
 pillow
 python-dotenv
 numpy
-ultralytics==8.0.20
-torch
+google-genai
+ultralytics>=8.3.0
+torch==2.5.1
 torchvision
+dill

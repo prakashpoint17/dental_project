@@ -1,14 +1,16 @@
+from pathlib import Path
+
 from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from ultralytics import YOLO
 import json
-import os
-import urllib.request
+import asyncio
 # Import the service function
 from app.services.detection import run_detection
 from app.services.report import generate_dental_report
 from app.services.audio import generate_report_with_audio
+import torch 
 
 app = FastAPI()
 
@@ -21,38 +23,32 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Load model once at startup
-# model = YOLO("app/model/best.pt")
+# Load model once at startup (path relative to this file — works from any cwd)
+MODEL_PATH = str(Path(__file__).resolve().parent / "model" / "best.pt")
 
-MODEL_URL = "https://huggingface.co/prakash1702/dental-yolo-model/blob/main/best.pt"
-MODEL_PATH = "best.pt"
+if not Path(MODEL_PATH).is_file():
+    raise FileNotFoundError(f"Model not found at {MODEL_PATH}")
 
-def download_model():
-    if not os.path.exists(MODEL_PATH):
-        print("Downloading model...")
-        urllib.request.urlretrieve(MODEL_URL, MODEL_PATH)
-        print("Done")
-
-download_model()
-
-model = YOLO("best.pt")
+model = YOLO(MODEL_PATH)
 
 @app.post("/diagnose")
 async def diagnose(file: UploadFile = File(...), selected_classes: str = Form("[]")):
-    # 1. Read the file bytes here (asynchronous)
+    
     img_bytes = await file.read()
-    
-    # 2. Call the service function (synchronous logic)
+
     result_data = run_detection(img_bytes, selected_classes, model)
-    
-    
+
     return JSONResponse(content=result_data)
 
 @app.post("/report")
 async def report(file:UploadFile = File(...), detections:str = Form("[]")):
-
+    
     # Generate AI report (Gemini)
     # Return response
+    
+    if not file:
+        return JSONResponse(content={"error": "No file uploaded"}, status_code=400)
+    
     img_bytes = await file.read()
     
     try:
@@ -61,10 +57,12 @@ async def report(file:UploadFile = File(...), detections:str = Form("[]")):
         parsed_detections=[]
     
     try:
-        report = generate_dental_report(
+        report = await asyncio.to_thread(
+            generate_dental_report,
             img_bytes,
             parsed_detections
         )
+        
     except Exception as e:
         report = {"error":str(e)}
         
@@ -72,6 +70,9 @@ async def report(file:UploadFile = File(...), detections:str = Form("[]")):
 
 @app.post("/report-audio")
 async def report_audio(file: UploadFile = File(...),audio: UploadFile = File(...),detections: str = Form("[]")):
+    
+    if not file:
+        return JSONResponse(content={"error": "No file uploaded"}, status_code=400)
     
     img_bytes = await file.read()
     audio_bytes = await audio.read()
@@ -109,7 +110,8 @@ async def report_audio(file: UploadFile = File(...),audio: UploadFile = File(...
     print("Final MIME used:", mime_type)
         
     try:
-        report = generate_report_with_audio(
+        report = await asyncio.to_thread(
+            generate_report_with_audio,
             img_bytes,
             parsed,
             audio_bytes,
