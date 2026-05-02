@@ -6,7 +6,7 @@
 
 # 🔴 Training folders
 backend/dental_train7/
-backend/app/model/
+backend/app/model/best.pt
 
 # 🔴 Python
 __pycache__/
