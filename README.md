@@ -84,6 +84,9 @@ backend/app/model/best.pt
 
 Create `backend/app/model/` if needed. Weight files (`*.pt`) and this folder are **gitignored** on purpose.
 
+
+**download it from this link** - [**`best.pt`**](https://drive.google.com/file/d/11ybrlscUYMIICppOnHSBPoUbPOGfIJlp/view?usp=sharing)
+
 ---
 
 ## 3. Backend: environment variables
@@ -230,6 +233,18 @@ Exploratory workflow: [`backend/notebook/dental_app.ipynb`](backend/notebook/den
 
 ---
 
-## License / attribution
+# Resources 
 
-Add your preferred license and attribute third-party stacks: **Ultralytics YOLO**, **FastAPI**, **React**, **Vite**, **MUI**, **Google Gemini**.
+**Data processing** - [dental_data_import_project.ipynb](https://colab.research.google.com/drive/149AcYIdCZ-gHB5qdSEpXCVuFQmfZyoYq?usp=sharing)
+
+**ML Model Train** - [Dental_ml_model_train_scratch.ipynb](https://colab.research.google.com/drive/1piEg-ahu1gNTcm4BGTgMISI6h2bjAUfk?usp=sharing)
+
+**ML Model Fine Tuning and Training** - [dental_data_import_project.ipynb](https://colab.research.google.com/drive/1iENvk4jIBfwS56fB83IDC2ZhlDYcrpb1?usp=sharing)
+
+**Trained Model `bset.pt`** - [best.pt](https://drive.google.com/file/d/11ybrlscUYMIICppOnHSBPoUbPOGfIJlp/view?usp=sharing)
+
+**GIT reppository** - [github.com/prakashpoint17/dental_project](https://github.com/prakashpoint17/dental_project.git)
+
+**Train Dataset** - [Data Source](https://drive.google.com/drive/folders/1dWLCHd9uKE5r9KF5u31YFjZhmR8ivy2b?usp=sharing)
+
+**Dental Train Output** - [Fine tune output](https://drive.google.com/drive/folders/1ntdTsQn4xExHHxT1HEDCekuI40Ca3HKA?usp=sharing)
